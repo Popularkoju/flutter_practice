@@ -7,6 +7,7 @@ import 'package:flutter_practice/video_trimmer/video_trimmer.dart';
 import 'package:provider/provider.dart';
 
 import 'components/bottom_sheet.dart';
+import 'components/new_bt_sheet.dart';
 import 'gemini/gemini.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
@@ -40,7 +41,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: Sca(),
+      home: BottomSheetDemo(),
       // home:  MyHomePage(title: "popular"),
     );
 

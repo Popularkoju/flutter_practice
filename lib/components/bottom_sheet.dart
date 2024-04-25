@@ -74,7 +74,7 @@ class BottomSheetManagement with DiagnosticableTreeMixin, ChangeNotifier {
 
         atTop = false;
       }else{
-        _offset = MediaQuery.of(context).size.height -(100);
+        _offset = MediaQuery.of(context).size.height- 90;
 
         atTop = true;
       }
@@ -238,14 +238,14 @@ class _ScaState extends State<Sca> {
     double height = MediaQuery.of(context).size.height ;
     double width = MediaQuery.of(context).size.width;
     double cardWidth = width;
-    double boxHeight = height-100;
+    double boxHeight = height-90;
     return SafeArea(
       child: Scaffold(
       backgroundColor: Colors.grey,
         body: Stack(
           alignment: Alignment.bottomCenter,
           children: [
-Center(child: Container(height: 500,)),
+// Center(child: Container(height: 500,)),
             Positioned(
                 top: boxHeight - watch.offset,
                 height: height,
@@ -253,9 +253,9 @@ Center(child: Container(height: 500,)),
               child: Column(
                 children: [
                   SlidingUpHeader(50),
-                  Expanded(child: Container(
-                    color: Colors.red,
-                  ))
+                  // Expanded(child: Container(
+                  //   color: Colors.red,
+                  // ))
                 ],
               ),
             )
