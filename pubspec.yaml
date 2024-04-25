@@ -48,6 +48,7 @@ dependencies:
   path: ^1.8.1
   google_generative_ai: ^0.2.0
   flutter_markdown: any
+  provider:
 
 dev_dependencies:
   flutter_test:

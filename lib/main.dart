@@ -4,14 +4,20 @@ import 'package:flutter_practice/video_trimmer/raw_video_file.dart';
 import 'package:flutter_practice/video_trimmer/video_downloader.dart';
 import 'package:flutter_practice/video_trimmer/video_screen.dart';
 import 'package:flutter_practice/video_trimmer/video_trimmer.dart';
+import 'package:provider/provider.dart';
 
+import 'components/bottom_sheet.dart';
 import 'gemini/gemini.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  runApp(const MyApp());
+  runApp(MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (_)=> BottomSheetManagement()),
+      ]
+      ,child: const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -34,7 +40,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: GenerativeAISample(),
+      home: Sca(),
       // home:  MyHomePage(title: "popular"),
     );
 
