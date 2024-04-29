@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_practice/clipper/custom_clipper_container.dart';
 import 'package:flutter_practice/screens/scroll_progress.dart';
 import 'package:flutter_practice/video_trimmer/raw_video_file.dart';
 import 'package:flutter_practice/video_trimmer/video_downloader.dart';
@@ -41,7 +42,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: BottomSheetDemo(),
+      home: RhombusContainer( width: 200, height: 200, color: Colors.brown,),
       // home:  MyHomePage(title: "popular"),
     );
 
