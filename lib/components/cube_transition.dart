@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 
 import 'package:cube_transition_plus/cube_transition_plus.dart';
 import 'package:flutter/material.dart';
@@ -64,15 +65,52 @@ class _CubeTrasitionDemoState extends State<CubeTrasitionDemo> {
         body: Center(
           child: SizedBox(
             height: MediaQuery.of(context).size.height,
-            child: CubePageView(
-                controller: cubTransitionController,
-                transformStyle: CubeTransformStyle.outside,
-                children: [
-                  ...stories.map((story) => SinglePersonStory(
-                        dayImages: story.dayImages,
+            child: CubePageView.builder(
+              controller: cubTransitionController,
+              itemCount: stories.length,
+              itemBuilder: (context, index, notifier) {
+                final item = stories[index];
+                final transform = Matrix4.identity();
+                final t = (index - notifier).abs();
+                final scale = lerpDouble(1.5, 0, t);
+                transform.scale(scale, scale);
+                return CubeWidget(
+                  index: index,
+                  pageNotifier: notifier,
+                  child: Stack(
+                    children: [
+                      SinglePersonStory(
+                        dayImages: item.dayImages,
                         changePage: changePage,
-                      ))
-                ]),
+                      ),
+                      Transform(
+                        alignment: Alignment.center,
+                        transform: transform,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(12.0),
+                            child: Container(
+                              decoration: const BoxDecoration(boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black45,
+                                  spreadRadius: 5,
+                                  blurRadius: 5,
+                                ),
+                              ]),
+                              child: Text(
+                                "Test ${index + 1}",
+                                textAlign: TextAlign.center,
+                                style: Theme.of(context).textTheme.headline5,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -120,7 +158,7 @@ class _SinglePersonStoryState extends State<SinglePersonStory> {
   }
 
   void _startTimer(DayImages dayImages) {
-    const tick = Duration(milliseconds: 100); // Update progress every 100 milliseconds
+    const tick = Duration(milliseconds: 10); // Update progress every 100 milliseconds
     _timer = Timer.periodic(tick, (Timer timer) {
       setState(() {
         _progress += tick.inMilliseconds / dayImages.milliseconds;
