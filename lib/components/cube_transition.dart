@@ -7,9 +7,10 @@ import 'package:flutter/material.dart';
 class DayImages {
   String dayImages;
   int milliseconds;
-  double progress ;
+  double progress;
 
-  DayImages({required this.dayImages, required this.milliseconds, this.progress = 0});
+  DayImages(
+      {required this.dayImages, required this.milliseconds, this.progress = 0});
 }
 
 class Story {
@@ -34,7 +35,7 @@ List<Story> stories = [
   ),
   Story(
     dayImages: [
-      DayImages(dayImages: 'https://picsum.photos/200/300', milliseconds: 1000),
+      DayImages(dayImages: 'https://picsum.photos/200/300', milliseconds: 5000),
       DayImages(dayImages: 'https://picsum.photos/200/300', milliseconds: 3000),
       DayImages(dayImages: 'https://picsum.photos/200/300', milliseconds: 2000),
       DayImages(dayImages: 'https://picsum.photos/200/300', milliseconds: 1000),
@@ -53,8 +54,10 @@ class _CubeTrasitionDemoState extends State<CubeTrasitionDemo> {
   PageController cubTransitionController = PageController();
 
   changePage() {
-    cubTransitionController.nextPage(
-        duration: Duration(seconds: 1), curve: Curves.easeIn);
+    if (stories.length > cubTransitionController.page!.round()) {
+      cubTransitionController.nextPage(
+          duration: const Duration(milliseconds: 1000), curve: Curves.easeIn);
+    }
   }
 
   @override
@@ -83,29 +86,29 @@ class _CubeTrasitionDemoState extends State<CubeTrasitionDemo> {
                         dayImages: item.dayImages,
                         changePage: changePage,
                       ),
-                      Transform(
-                        alignment: Alignment.center,
-                        transform: transform,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Container(
-                              decoration: const BoxDecoration(boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black45,
-                                  spreadRadius: 5,
-                                  blurRadius: 5,
-                                ),
-                              ]),
-                              child: Text(
-                                "Test ${index + 1}",
-                                textAlign: TextAlign.center,
-                                style: Theme.of(context).textTheme.headline5,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      // Transform(
+                      //   alignment: Alignment.center,
+                      //   transform: transform,
+                      //   child: Center(
+                      //     child: Padding(
+                      //       padding: const EdgeInsets.all(12.0),
+                      //       child: Container(
+                      //         decoration: const BoxDecoration(boxShadow: [
+                      //           BoxShadow(
+                      //             color: Colors.black45,
+                      //             spreadRadius: 5,
+                      //             blurRadius: 5,
+                      //           ),
+                      //         ]),
+                      //         child: Text(
+                      //           "Test ${index + 1}",
+                      //           textAlign: TextAlign.center,
+                      //           style: Theme.of(context).textTheme.headline5,
+                      //         ),
+                      //       ),
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   ),
                 );
@@ -137,38 +140,36 @@ class _SinglePersonStoryState extends State<SinglePersonStory> {
 
   @override
   void initState() {
-    Timer.periodic(Duration(seconds: 3), (timer) {
-      if(viewingIndex == 0){
-        _startTimer(widget.dayImages[viewingIndex]);
-      }
-      viewingIndex++;
-      if (viewingIndex < widget.dayImages.length) {
-
-        controller.nextPage(
-            duration: Duration(milliseconds: 200), curve: Curves.easeIn);
-      } else {
-        viewingIndex = 0;
-        timer?.cancel();
-        widget.changePage.call();
-      }
-    });
-
+    _startTimer();
     setState(() {});
     super.initState();
   }
 
-  void _startTimer(DayImages dayImages) {
-    const tick = Duration(milliseconds: 10); // Update progress every 100 milliseconds
+  void _startTimer() {
+    const tick =
+        Duration(milliseconds: 100); // Update progress every 100 milliseconds
     _timer = Timer.periodic(tick, (Timer timer) {
       setState(() {
-        _progress += tick.inMilliseconds / dayImages.milliseconds;
-
+        _progress +=
+            tick.inMilliseconds / (widget.dayImages[viewingIndex].milliseconds);
+        widget.dayImages[viewingIndex].progress = _progress;
         if (_progress >= 1.0) {
-          _timer?.cancel();
           _progress = 1.0;
+          viewingIndex++;
+          if (viewingIndex >= widget.dayImages.length) {
+            _timer?.cancel();
+            widget.changePage.call();
+            print('All objects processed!');
+          } else {
+            _progress = 0.0;
+            controller.animateToPage(
+              viewingIndex,
+              duration: const Duration(milliseconds: 700),
+              curve: Curves.ease,
+            );
+            // widget.dayImages[viewingIndex-1].progress = 0.0;
+          }
         }
-
-        dayImages.progress = _progress;
       });
     });
   }
@@ -180,12 +181,19 @@ class _SinglePersonStoryState extends State<SinglePersonStory> {
           physics: const NeverScrollableScrollPhysics(),
           itemCount: widget.dayImages.length,
           controller: controller,
-          onPageChanged: (index){
-            _timer?.cancel();
-            _startTimer(widget.dayImages[index]);
+          onPageChanged: (index) {
+            viewingIndex = index;
+            _progress = 0;
+            // _timer?.cancel();
+            // _startTimer();
           },
           itemBuilder: (context, index) {
-            return Image.network(widget.dayImages[index].dayImages);
+            return Image.network(
+              widget.dayImages[index].dayImages,
+              height: MediaQuery.of(context).size.height,
+              width: MediaQuery.of(context).size.width,
+              fit: BoxFit.cover,
+            );
           }),
       Row(
         children: [
@@ -196,6 +204,7 @@ class _SinglePersonStoryState extends State<SinglePersonStory> {
                     padding: const EdgeInsets.all(8.0),
                     child: LinearProgressIndicator(
                       value: widget.dayImages[index].progress,
+                      //
                     ),
                   ))),
         ],
