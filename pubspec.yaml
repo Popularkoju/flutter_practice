@@ -49,6 +49,7 @@ dependencies:
   google_generative_ai: ^0.2.0
   flutter_markdown: any
   provider:
+  cube_transition_plus: ^2.0.1
 
 dev_dependencies:
   flutter_test:

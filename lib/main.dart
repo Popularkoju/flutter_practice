@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_practice/clipper/custom_clipper_container.dart';
+import 'package:flutter_practice/components/cube_transition.dart';
 import 'package:flutter_practice/screens/scroll_progress.dart';
 import 'package:flutter_practice/video_trimmer/raw_video_file.dart';
 import 'package:flutter_practice/video_trimmer/video_downloader.dart';
@@ -9,6 +10,7 @@ import 'package:provider/provider.dart';
 
 import 'components/bottom_sheet.dart';
 import 'components/new_bt_sheet.dart';
+import 'components/page_view_transition.dart';
 import 'gemini/gemini.dart';
 // import 'package:permission_handler/permission_handler.dart';
 
@@ -42,7 +44,15 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: RhombusContainer( width: 200, height: 200, color: Colors.brown,),
+      home: CubeTrasitionDemo()
+
+
+      // RhombusContainer( width: 200, height: 200, color: Colors.brown,),
+
+
+
+
+
       // home:  MyHomePage(title: "popular"),
     );
 
